@@ -1,4 +1,4 @@
-### Aim 15 ### ----
+### Results - Section 2.4 ### ----
 
 ### Load Packages ### ----
 library(dplyr)
@@ -18,9 +18,9 @@ library(lme4)
 library(lmerTest)
 library(ENmix)
 
-############################################################################
-################################## Aim 15 ##################################
-############################################################################
+##################################################################################################
+################################## Highly Stable Probe Analysis ##################################
+##################################################################################################
 ### Set Seed ### ----
 set.seed(100)
 
@@ -100,85 +100,27 @@ HighProbes <- dplyr::filter(data, data$ICC_Scen1 >= 0.9 &
                               data$ICC_Scen4 >= 0.9 &
                               data$ICC_Scen5 >= 0.9 &
                               data$ICC_Scen10 >= 0.9)
-Stress_S6_HighProbes <- dplyr::filter(HighProbes, HighProbes$ICC_Scen6 <= 1)
-Stress_S7_HighProbes <- dplyr::filter(HighProbes, HighProbes$ICC_Scen7 <= 1)
-Stress_S8_HighProbes <- dplyr::filter(HighProbes, HighProbes$ICC_Scen8 <= 1)
 
 ### Determine Genes Associated with Probes ### ----
 annEPIC <- getAnnotation(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
 keep <- grepl("TSS", annEPIC$UCSC_RefGene_Group, fixed=TRUE)
 annEPIC <- annEPIC[keep,]
 
-keep <- annEPIC$Name %in% Stress_S6_HighProbes$DNAm.probe
-annEPIC_S6 <- annEPIC[keep,]
-Stress_Genes_S6 <- annEPIC_S6$UCSC_RefGene_Name
-Stress_Genes_S6 <- gsub(";.*","",Stress_Genes_S6)
-
-keep <- annEPIC$Name %in% Stress_S7_HighProbes$DNAm.probe
-annEPIC_S7 <- annEPIC[keep,]
-Stress_Genes_S7 <- annEPIC_S7$UCSC_RefGene_Name
-Stress_Genes_S7 <- gsub(";.*","",Stress_Genes_S7)
-
-keep <- annEPIC$Name %in% Stress_S8_HighProbes$DNAm.probe
-annEPIC_S8 <- annEPIC[keep,]
-Stress_Genes_S8 <- annEPIC_S8$UCSC_RefGene_Name
-Stress_Genes_S8 <- gsub(";.*","",Stress_Genes_S8)
+keep <- annEPIC$Name %in% HighProbes$DNAm.probe
+annEPIC <- annEPIC[keep,]
+Stress_Genes <- annEPIC$UCSC_RefGene_Name
+Stress_Genes <- gsub(";.*","",Stress_Genes)
 
 ### Keep Only Probes at TSS ### ----
-keep <- Stress_S6_HighProbes$DNAm.probe %in% annEPIC@listData$Name
-Stress_S6_HighProbes <- Stress_S6_HighProbes[keep,]
-
-keep <- Stress_S7_HighProbes$DNAm.probe %in% annEPIC@listData$Name
-Stress_S7_HighProbes <- Stress_S7_HighProbes[keep,]
-
-keep <- Stress_S8_HighProbes$DNAm.probe %in% annEPIC@listData$Name
-Stress_S8_HighProbes <- Stress_S8_HighProbes[keep,]
-
-### Read in Data ### ----
-Stress_Genes_S6 <- mapIds(org.Hs.eg.db, Stress_Genes_S6, 'ENTREZID', 'SYMBOL')
-Stress_Genes_S7 <- mapIds(org.Hs.eg.db, Stress_Genes_S7, 'ENTREZID', 'SYMBOL')
-Stress_Genes_S8 <- mapIds(org.Hs.eg.db, Stress_Genes_S8, 'ENTREZID', 'SYMBOL')
-
-### Gene over-representation analysis ### ----
-go_enrich_S6 <- enrichGO(gene = Stress_Genes_S6,
-                            OrgDb = org.Hs.eg.db, 
-                            keyType = 'ENTREZID',
-                            readable = T,
-                            ont = "BP",
-                            pvalueCutoff = 0.05, 
-                            qvalueCutoff = 0.10)
-
-go_enrich_S7 <- enrichGO(gene = Stress_Genes_S7,
-                         OrgDb = org.Hs.eg.db, 
-                         keyType = 'ENTREZID',
-                         readable = T,
-                         ont = "BP",
-                         pvalueCutoff = 0.05, 
-                         qvalueCutoff = 0.10)
-
-go_enrich_S8 <- enrichGO(gene = Stress_Genes_S8,
-                         OrgDb = org.Hs.eg.db, 
-                         keyType = 'ENTREZID',
-                         readable = T,
-                         ont = "BP",
-                         pvalueCutoff = 0.05, 
-                         qvalueCutoff = 0.10)
-
-# Create barplot for top categories #
-barplot(go_enrich_S8, 
-        drop = TRUE, 
-        showCategory = 10, 
-        title = "GO Biological Pathways - Stress",
-        font.size = 8)
+keep <- HighProbes$DNAm.probe %in% annEPIC@listData$Name
+HighProbes <- HighProbes[keep,]
 
 ### Scatter Plots for Specific Probes ### ----
 # Read in data #
 bVals <- readRDS("../Methylation/bVals_NoobNorm_SampFilter.RDS")
 Phenotypes <- read.csv("Phenotypes.csv")[,-1]
 # Keep only probes that are unreliable in all three stress sessions #
-Probes_to_Test <- unique(c(Stress_S6_HighProbes$DNAm.probe, 
-                           Stress_S7_HighProbes$DNAm.probe,
-                           Stress_S8_HighProbes$DNAm.probe))
+Probes_to_Test <- bvals[,1] %in% HighProbes$DNAm.probe
 bVals_Test <- as.data.frame(bVals[Probes_to_Test,])
 bVals_Test <- data.frame(t(bVals_Test))
 bVals_Test <- tibble::rownames_to_column(bVals_Test, "Sample_Name")
@@ -233,10 +175,10 @@ MLM_Results$Pval_T4_FDRadj <- p.adjust(MLM_Results$Pval_T4, method = "fdr")
 ### Create Manhattan Plot ### ----
 # Create data frame for plotting #
 MLM_Results_Sorted <- MLM_Results[order(MLM_Results$DNAm.probe),]
-Probe_Additional_Info <- data.frame(DNAm.probe = annEPIC_S6@listData$Name,
-                                    Chr = annEPIC_S6@listData$chr,
-                                    Pos = annEPIC_S6@listData$pos,
-                                    Gene = annEPIC_S6@listData$UCSC_RefGene_Name)
+Probe_Additional_Info <- data.frame(DNAm.probe = annEPIC@listData$Name,
+                                    Chr = annEPIC@listData$chr,
+                                    Pos = annEPIC@listData$pos,
+                                    Gene = annEPIC@listData$UCSC_RefGene_Name)
 # Combine additional info to MLM results #
 MLM_Results_Sorted <- merge(MLM_Results_Sorted, Probe_Additional_Info, by = "DNAm.probe")
 # Exclude sex chromosome probes #
@@ -247,6 +189,29 @@ saveRDS(MLM_Results_Sorted, "MLM_Results_Sorted_Aim15.Rds")
 MLM_Results_Sorted <- readRDS("MLM_Results_Sorted_Aim15.Rds")
 # Generate Manhattan plots #
 # BF sig from sex chromosome excluded #
+# Time 2 #
+mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
+        chr=MLM_Results_Sorted$Chr,
+        pos=MLM_Results_Sorted$Pos,
+        p=MLM_Results_Sorted$Pval_T2,
+        sigthre=0.05,
+        sigthre2=(0.05/1413),
+        outf="T2vT1_ManhattanPlot",
+        #markprobe = c("cg19913448"),
+        outfmt="jpg")
+
+# Time 3 #
+mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
+        chr=MLM_Results_Sorted$Chr,
+        pos=MLM_Results_Sorted$Pos,
+        p=MLM_Results_Sorted$Pval_T3,
+        sigthre=0.05,
+        sigthre2=(0.05/1413),
+        outf="T3vT1_ManhattanPlot",
+        #markprobe = c("cg19913448"),
+        outfmt="jpg")
+
+# Time 4 #
 mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
         chr=MLM_Results_Sorted$Chr,
         pos=MLM_Results_Sorted$Pos,
@@ -256,21 +221,6 @@ mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
         outf="T4vT1_ManhattanPlot",
         #markprobe = c("cg19913448"),
         outfmt="jpg")
-
-### Gene Set Overrepresentation Analysis ### ----
-# Determine which genes to keep #
-GSO_Genes <- MLM_Results_Sorted$Gene[MLM_Results_Sorted$Pval_T4 < (0.05/1413)]
-GSO_Genes <- gsub(";.*","",GSO_Genes)
-# Change gene names to ENTREZID #
-GSO_Genes <- mapIds(org.Hs.eg.db, GSO_Genes, 'ENTREZID', 'SYMBOL')
-# Gene over-representation analysis #
-MLM_Results_GO <- enrichGO(gene = GSO_Genes,
-                         OrgDb = org.Hs.eg.db, 
-                         keyType = 'ENTREZID',
-                         readable = T,
-                         ont = "BP",
-                         pvalueCutoff = 0.05, 
-                         qvalueCutoff = 0.10)
 
 ### Looking at GSR Expression Profiles ### ----
 Phenotypes <- read.csv("Phenotypes.csv")[,-1]
