@@ -16,13 +16,13 @@ load("Data/bVals_SampFilt.RData")
 bVals.t <- t(bVals)
 probe.name <- colnames(bVals.t)
 probe.n <- length(probe.name)
-targets <- targets[,-1]
+targets$Methylation_Batch <- factor(targets$Methylation_Batch)
+targets$Sex <- factor(targets$Sex)
+targets$MinorityStatus <- factor(targets$MinorityStatus)
 
-# comb <- cbind(targets, bVals.t)
-# comb <- comb[,-1]
-
-# Function definition # ----
-# Update the function for ICC calculation
+# Create new R functions # ----
+# Update the function for ICC calculation to be able to control for covariates when calculating ICCs 
+# (adapted from the code for the ICC() function)
 ICC.n <- function(data, id, item, value, covariates = NULL, alpha = .05, lmer = TRUE) 
 {
   cl <- match.call()
@@ -174,8 +174,20 @@ ICC.n.m <- function(probe.data, phenotype.data, subject, time, probe, covariates
     
     data.comb <- cbind(probe.data.n, phenotype.data.n)
     colnames(data.comb)[1] <- probe[i]
+    
+    covariates2 <- c(NULL)
+    for (k in 1:length(covariates)) {
+      if (class(data.comb[, covariates[k]]) == "numeric") {
+        covariates2 <- c(covariates2, covariates[k])
+      } else if (class(data.comb[, covariates[k]]) == "factor") {
+        if (length(unique(data.comb[, covariates[k]])) == length(levels(data.comb[, covariates[k]]))) {
+          covariates2 <- c(covariates2, covariates[k])
+        }
+        else {covariates2 <- covariates2}
+      }
+    }
     res.temp <- ICC.n(data = data.comb, id = subject, item = time, value = probe[i], 
-                      covariates = covariates, alpha = alpha, lmer = lmer)$results
+                      covariates = covariates2, alpha = alpha, lmer = lmer)$results
     for (j in 1:length(icc.type)){
       res.ind <- which(res.temp$type == icc.type)
       res.temp.2 <- data.frame(DNAm.probe = probe[i],
@@ -195,7 +207,7 @@ ICC.n.m <- function(probe.data, phenotype.data, subject, time, probe, covariates
 }
 
 # Bland-Altman plot function
-### code is adapted from https://cegh.net/article/S2213-3984(21)00139-1/fulltext
+### code was adapted from https://cegh.net/article/S2213-3984(21)00139-1/fulltext
 BA.plot <- function(m1, m2, note) {
   means <- (m1 + m2) / 2
   diffs <- m1 - m2; mdiff <- mean(diffs); sddiff <- sd(diffs)
@@ -228,366 +240,214 @@ BA.plot <- function(m1, m2, note) {
   legend("topright", bty = "n",legend = expr)
   title(main = paste("Bland-Altman plot \n", note, sep = ""))}
 
-# ICC generation # ----
-## Scenario 1 to 5, and 11
-sess <- 0 ; samp <- F
-scen <- 1 ; comp.list <- list(c(1, 2)) ; ela <- c(0, 1) #1
-scen <- 2 ; comp.list <- list(c(2, 3)) ; ela <- c(0, 1) #2
-scen <- 3 ; comp.list <- list(c(1, 3)) ; ela <- c(0, 1) #3
-scen <- 4 ; comp.list <- list(c(3, 4)) ; ela <- c(0, 1) #4
-scen <- 5 ; comp.list <- list(c(1, 2, 3, 4)) ; ela <- c(0, 1) #5
-scen <- "5a" ; comp.list <- list(c(1, 2, 3, 4)); ela <- 0 #5a
-scen <- "5b" ; comp.list <- list(c(1, 2, 3, 4)); ela <- 1 #5b
-scen <- 11 ; comp.list <- list(c(1, 4)) ; ela <- c(0, 1) #11
-
-
-## Scenario 6 to 9, and 12
-sess <- 1 ; samp <- F
-
-scen <- 6 ; comp.list <- list(c(1, 2)) ; ela <- c(0, 1) # 6
-scen <- "6a" ; comp.list <- list(c(1, 2)) ; ela <- 0 # 6.1
-scen <- "6b" ; comp.list <- list(c(1, 2)) ; ela <- 1 # 6.2
-
-scen <- 7 ; comp.list <- list(c(1, 3)) ; ela <- c(0, 1) # 7
-scen <- "7a" ; comp.list <- list(c(1, 3)) ; ela <- 0 # 7.1
-scen <- "7b" ; comp.list <- list(c(1, 3)) ; ela <- 1 # 7.2
-
-scen <- 8 ; comp.list <- list(c(1, 4)) ; ela <- c(0, 1) # 8
-scen <- "8a" ; comp.list <- list(c(1, 4)) ; ela <- 0 # 8.1
-scen <- "8b" ; comp.list <- list(c(1, 4)) ; ela <- 1 # 8.2
-
-scen <- 9 ; comp.list <- list(c(3, 4)) ; ela <- c(0, 1) # 9
-scen <- "9a" ; comp.list <- list(c(3, 4)) ; ela <- 0 # 9.1
-scen <- "9b" ; comp.list <- list(c(3, 4)) ; ela <- 1 # 9.2
-
-scen <- 12 ; comp.list <- list(c(1, 2, 3, 4)) ; ela <- c(0, 1) # 12
-
-for (i in 1:length(sess)) {
-  for (j in 1:length(comp.list)) {
-    ind <- (targets %>%
-              filter(Session == sess[i]) %>%
-              filter(Time %in% comp.list[[j]]) %>%
-              filter(ELA %in% ela) %>%
-              group_by(Individual) %>%
-              dplyr::count() %>%
-              filter(n == length(comp.list[[j]])))$Individual
-    
-    pheno.nt <- targets %>%
-      filter(Individual %in% ind) %>%
-      filter(Session == sess[i]) %>%
-      filter(Time %in% comp.list[[j]])
-    
-    probe.nt <- bVals.t[match(pheno.nt$Sample_Name, rownames(bVals.t)), ]
-    
-    ## Print the time
-    start.time <- Sys.time()
-    print(paste("ICC calculation start at", start.time))
-    
-    ## ICC(2,1) and ICC(2,k) for all the probes without adjustment
-    icc21.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[1:round(probe.n/2,0)], 
-                         icc.type = "ICC2", sample.individual = samp)}
-    
-    icc21.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[(round(probe.n/2,0)+1):probe.n], 
-                          icc.type = "ICC2", sample.individual = samp)}
-    
-    
-    icc2k.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[1:round(probe.n/2,0)], 
-                         icc.type = "ICC2k", sample.individual = samp)}
-    
-    icc2k.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[(round(probe.n/2,0)+1):probe.n], 
-                          icc.type = "ICC2k", sample.individual = samp)}
-    
-    
-    ## ICC(2,1) and ICC(2,k) for all the probes adjusting for DNAm monocyte percentage
-    icc21.mono.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[1:round(probe.n/2,0)],
-                          covariates = "DNAm_Monocytes", icc.type = "ICC2", sample.individual = samp)}
-    
-    icc21.mono.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[(round(probe.n/2,0)+1):probe.n],
-                               covariates = "DNAm_Monocytes", icc.type = "ICC2", sample.individual = samp)}
-    
-    
-    icc2k.mono.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[1:round(probe.n/2,0)],
-                             covariates = "DNAm_Monocytes", icc.type = "ICC2k", sample.individual = samp)}
-    
-    icc2k.mono.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Time", probe = probe.name[(round(probe.n/2,0)+1):probe.n],
-                               covariates = "DNAm_Monocytes", icc.type = "ICC2k", sample.individual = samp)}
-    
-    
-    ## Combine all the results together
-    icc21 %<-% rbind(icc21.1, icc21.2)
-    icc2k %<-% rbind(icc2k.1, icc2k.2)
-    icc21.mono %<-% rbind(icc21.mono.1, icc21.mono.2)
-    icc2k.mono %<-% rbind(icc2k.mono.1, icc2k.mono.2)
-    
-    icc.comb <- rbind(icc21,
-                      icc2k,
-                      icc21.mono,
-                      icc2k.mono)
-    
-    rm(icc21.1)
-    rm(icc21.2)
-    rm(icc2k.1)
-    rm(icc2k.2)
-    rm(icc21.mono.1)
-    rm(icc21.mono.2)
-    rm(icc2k.mono.1)
-    rm(icc2k.mono.2)
-    
-    ## Check progress
-    print(paste("ICC calculation and data combination done!", Sys.time()))
-    print(Sys.time()-start.time)
-    
-    icc.comb$type_cov <- paste(icc.comb$type, icc.comb$covariates, sep = "_")
-    icc.comb$type_cov <- factor(icc.comb$type_cov,
-                                levels = c("ICC2_No covariates",
-                                           "ICC2_DNAm_Monocytes",
-                                           "ICC2k_No covariates",
-                                           "ICC2k_DNAm_Monocytes"),
-                                labels  = c("ICC(2,1) no covariates",
-                                            "ICC(2,1) adjusted for DNAm_Monocytes",
-                                            "ICC(2,k) no covariates",
-                                            "ICC(2,k) adjusted for DNAm_Monocytes"))
-
-    icc.comb$type <- factor(icc.comb$type, levels = c("ICC2", "ICC2k"),
-                            labels = c("ICC(2,1)", "ICC(2,k)"))
-
-    icc.comb$covariates <- factor(icc.comb$covariates,
-                                  levels = c("No covariates", "DNAm_Monocytes"),
-                                  labels = c("No covariates", "Adjusted for DNAm_Monocytes"))
-    icc.comb$session <- rep(sess[i], length(probe.name)*4)
-    icc.comb$time <- rep(paste("t", paste0(comp.list[[j]], collapse = "t"), sep = ""), length(probe.name)*4)
-
-    print(paste("Variable adding to the combined dataset done!", Sys.time()))
-    print(Sys.time()-start.time)
-    
-    ## Save ICC data
-    save(icc.comb, file = paste("Results/", "scen", scen, "_icc", "_s", sess[i], "_t", paste0(comp.list[[j]], collapse = "t"), 
-                                "_ela", paste0(ela, collapse = ""), ".RData", sep = ""))
-    print(paste("Data saving done!", Sys.time()))
-    print(Sys.time()-start.time)
-    
-    ## Generate and export distribution plots
-    future({
-      p <- ggplot(data = icc.comb, aes(x = ICC)) +
-      geom_histogram(fill = ggplot2::alpha("gray", 0.3), color = "black", bins = 30) +
-      facet_wrap(facets = covariates~type, nrow = 2, ncol = 2) +
-      theme_classic()
-    ggsave(file = paste("Results/", "scen", scen, "_icc_dist", "_s", sess[i], "_t", paste0(comp.list[[j]], collapse = "t"), 
-                        "_ela", paste0(ela, collapse = ""), ".pdf", sep = ""),
-           plot = p, height = 6, width = 10)
-    })
-    
-    print(paste("Distribution plot done!", Sys.time()))
-    print(Sys.time()-start.time)
-
-    ## Generate BA plots
-    pdf(file = paste("Results/", "scen", scen, "_icc_baplot", "_s", sess[i], "_t", paste0(comp.list[[j]], collapse = "t"), 
-                     "_ela", paste0(ela, collapse = ""), ".pdf", sep = ""),
-        height = 6.5, width = 13.5)
-    par(mfrow=c(1,2))
-    BA.plot(icc21$ICC,icc21.mono$ICC, note = "ICC(2,1) vs. ICC(2,1) adjusted for monocytes")
-    BA.plot(icc2k$ICC,icc2k.mono$ICC, note = "ICC(2,k) vs. ICC(2,k) adjusted for monocytes")
-    dev.off()
-    
-    print(paste("BA plot done!", Sys.time()))
-    print(Sys.time()-start.time)
-
-    ## Test if there is a significant proportional bias in the Bland-Altman plots
-    icc21.baplot %<-% {data.frame(icc21.raw = icc21$ICC,
-                               icc21.monocytes = icc21.mono$ICC) %>%
-      mutate(icc21.mean = (icc21.raw + icc21.monocytes)/2,
-             icc21.diff = icc21.raw - icc21.monocytes)}
-
-    icc2k.baplot %<-% {data.frame(icc2k.raw = icc2k$ICC,
-                               icc2k.monocytes = icc2k.mono$ICC) %>%
-      mutate(icc2k.mean = (icc2k.raw + icc2k.monocytes)/2,
-             icc2k.diff = icc2k.raw - icc2k.monocytes)}
-
-    ba.biastest.res <- data.frame(ICC.type = c("icc21", "icc2k"),
-                                  Session = sess[i],
-                                  Time.points = rep(paste("t", comp.list[[j]][1], "t", comp.list[[j]][2], sep = ""), 2),
-                                  rbind(coef(summary(lm(icc21.diff ~ icc21.mean, data = icc21.baplot)))[2,],
-                                        coef(summary(lm(icc2k.diff ~ icc2k.mean, data = icc2k.baplot)))[2,]))
-    
-    colnames(ba.biastest.res) <- c("ICC.type", "Session", "Time.points", "B1.estimate", "Std.error", "t.value", "p.value")
-    
-    print(paste("BA plot proportional bias test done!", Sys.time()))
-    print(Sys.time()-start.time)
-    
-    write_csv(ba.biastest.res, file = paste("Results/", "scen", scen, "_ba_biastest_res", "_s",
-                                            sess[i], "_t", paste0(comp.list[[j]], collapse = "t"), 
-                                            "_ela", paste0(ela, collapse = ""), 
-                                            ".csv",
-                                            sep = ""))
-    
-    print(paste("BA plot proportional bias test results saved!", Sys.time()))
-    print(Sys.time()-start.time)
-    print("All done!!!")
-  }
+# ICC calculation # ----
+revision <- T
+scen <- opt$scenario
+if (scen %in% c(1:5, 11)) {
+  sess <- 0
+  samp <- F
+  ela <- c(0, 1)
+  tors <- "Time"
+  covar <- c("DNAm_Monocytes", "Methylation_Batch")
+  comp.list <- case_when(scen == 1 ~ list(c(1, 2)),
+                         scen == 2 ~ list(c(2, 3)),
+                         scen == 3 ~ list(c(1, 3)),
+                         scen == 4 ~ list(c(3, 4)),
+                         scen == 5 ~ list(c(1, 2, 3, 4)),
+                         scen == 11 ~ list(c(1, 4)))
+} else if (scen %in% c(6:9, 12)) {
+  sess <- 1
+  samp <- T
+  ela <- c(0, 1)
+  tors <- "Time"
+  covar <- c("DNAm_Monocytes", "Methylation_Batch")
+  comp.list <- case_when(scen == 6 ~ list(c(1, 2)),
+                         scen == 7 ~ list(c(1, 3)),
+                         scen == 8 ~ list(c(1, 4)),
+                         scen == 9 ~ list(c(3, 4)),
+                         scen == 12 ~ list(c(1, 2, 3, 4))) 
+  
+} else if (scen %in% paste0(rep(c(6:9), each = 2), c("a", "b"))) {
+  sess <- 1
+  samp <- F
+  tors <- "Time"
+  covar <- c("DNAm_Monocytes", "Methylation_Batch", "Age", "Sex", "MinorityStatus")
+  ela <- ifelse(str_detect(scen, pattern = "a") == T, 0, 1)
+  comp.list <- case_when(scen %in% c("6a", "6b") ~ list(c(1, 2)),
+                         scen %in% c("7a", "7b") ~ list(c(1, 3)),
+                         scen %in% c("8a", "8b") ~ list(c(1, 4)),
+                         scen %in% c("9a", "9b") ~ list(c(3, 4)))
+} else if (scen == 10) {
+  samp <- F
+  sess <- c(0, 1)
+  comp.list <- list(c(1))
+  ela <- c(0, 1)
+  tors <- "Session"
+  covar <- c("DNAm_Monocytes", "Methylation_Batch")
 }
 
-## Scenario 10
-scen <- 10
-sess <- c(0, 1)
-comp.list <- list(c(1))
 
-for (j in 1:length(comp.list)) {
-  ind <- (targets %>%
-            filter(Session %in% sess) %>%
-            filter(Time %in% comp.list[[j]]) %>%
-            group_by(Individual) %>%
-            dplyr::count() %>%
-            filter(n == 2))$Individual
-  
-  pheno.nt <- targets %>%
-    filter(Individual %in% ind) %>%
-    filter(Session %in% sess) %>%
-    filter(Time %in% comp.list[[j]])
-  
-  probe.nt <- bVals.t[match(pheno.nt$Sample_Name, rownames(bVals.t)), ]
-  
-  ## Print the time
-  start.time <- Sys.time()
-  print(paste("ICC calculation start at", start.time))
-  
-  ## ICC(2,1) and ICC(2,k) for all the probes without adjustment
-  icc21.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[1:round(probe.n/2)], 
-                   icc.type = c("ICC2"))}
-  icc21.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[(round(probe.n/2)+1):probe.n], 
-                        icc.type = c("ICC2"))}
-  
-  
-  icc2k.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[1:round(probe.n/2)], 
-                         icc.type = c("ICC2k"))}
-  
-  icc2k.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[(round(probe.n/2)+1):probe.n], 
-                        icc.type = c("ICC2k"))}
-  
-  
-  
-  ## ICC(2,1) and ICC(2,k) for all the probes adjusting for DNAm monocyte percentage
-  icc21.mono.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[1:round(probe.n/2)],
-                        covariates = "DNAm_Monocytes", icc.type = c("ICC2"))}
-  
-  icc21.mono.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[(round(probe.n/2)+1):probe.n],
-                           covariates = "DNAm_Monocytes", icc.type = c("ICC2"))}
-  
-  
-  icc2k.mono.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[1:round(probe.n/2)],
-                              covariates = "DNAm_Monocytes", icc.type = c("ICC2k"))}
-  
-  icc2k.mono.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = "Session", probe = probe.name[(round(probe.n/2)+1):probe.n],
-                           covariates = "DNAm_Monocytes", icc.type = c("ICC2k"))}
-  
-  
-  
-  ## Combine all the results together
-  icc21 %<-% rbind(icc21.1, icc21.2)
-  icc2k %<-% rbind(icc2k.1, icc2k.2)
-  icc21.mono %<-% rbind(icc21.mono.1, icc21.mono.2)
-  icc2k.mono %<-% rbind(icc2k.mono.1, icc2k.mono.2)
-  
-  icc.comb <- rbind(icc21,
-                    icc2k,
-                    icc21.mono,
-                    icc2k.mono)
-  rm(icc21.1)
-  rm(icc21.2)
-  rm(icc2k.1)
-  rm(icc2k.2)
-  rm(icc21.mono.1)
-  rm(icc21.mono.2)
-  rm(icc2k.mono.1)
-  rm(icc2k.mono.2)
-  
-  ## Check progress
-  print(paste("ICC calculation and data combination done!", Sys.time()))
-  print(Sys.time()-start.time)
-  
-  icc.comb$type_cov <- paste(icc.comb$type, icc.comb$covariates, sep = "_")
-  icc.comb$type_cov <- factor(icc.comb$type_cov, 
-                              levels = c("ICC2_No covariates",
-                                         "ICC2_DNAm_Monocytes",
-                                         "ICC2k_No covariates",
-                                         "ICC2k_DNAm_Monocytes"),
-                              labels  = c("ICC(2,1) no covariates",
-                                          "ICC(2,1) adjusted for DNAm_Monocytes",
-                                          "ICC(2,k) no covariates",
-                                          "ICC(2,k) adjusted for DNAm_Monocytes"))
-  
-  icc.comb$type <- factor(icc.comb$type, levels = c("ICC2", "ICC2k"),
-                          labels = c("ICC(2,1)", "ICC(2,k)"))
-  
-  icc.comb$covariates <- factor(icc.comb$covariates, 
-                                levels = c("No covariates", "DNAm_Monocytes"),
-                                labels = c("No covariates", "Adjusted for DNAm_Monocytes"))
+ind <- (targets %>%
+          filter(Session %in% sess) %>%
+          filter(Time %in% comp.list[[1]]) %>%
+          filter(ELA %in% ela) %>%
+          group_by(Individual) %>%
+          dplyr::count() %>%
+          filter(n == ifelse(length(sess) == 1, length(comp.list[[1]]), length(sess))))$Individual
 
-  icc.comb$session <- rep("s1s2", length(probe.name)*4)
-  icc.comb$time <- rep(paste("t", comp.list[[j]][1], sep = ""), length(probe.name)*4)
-  
-  print(paste("Variable adding to the combined dataset done!", Sys.time()))
-  print(Sys.time()-start.time)
-  
-  
-  ## Save ICC data
-  save(icc.comb, file = paste("Results/", "scen", scen, "_icc", "_s1s2", "_t", comp.list[[j]][1], ".RData", sep = ""))
-  
-  print(paste("Data saving done!", Sys.time()))
-  print(Sys.time()-start.time)
-  
-  ## Generate and export distribution plots
-  future({
+pheno.nt <- targets %>%
+  filter(Individual %in% ind) %>%
+  filter(Session %in% sess) %>%
+  filter(Time %in% comp.list[[1]])
+
+probe.nt <- bVals.t[match(pheno.nt$Sample_Name, rownames(bVals.t)), ]
+
+## Print the time
+start.time <- Sys.time()
+print(paste("ICC calculation start at", start.time))
+
+## ICC(2,1) and ICC(2,k) for all the probes without adjustment
+icc21.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[1:round(probe.n/2,0)], 
+                      icc.type = "ICC2", sample.individual = samp)} %seed% {seed=TRUE}
+
+icc21.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[(round(probe.n/2,0)+1):probe.n], 
+                      icc.type = "ICC2", sample.individual = samp)} %seed% {seed=TRUE}
+
+
+icc2k.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[1:round(probe.n/2,0)], 
+                      icc.type = "ICC2k", sample.individual = samp)} %seed% {seed=TRUE}
+
+icc2k.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[(round(probe.n/2,0)+1):probe.n], 
+                      icc.type = "ICC2k", sample.individual = samp)} %seed% {seed=TRUE}
+
+
+## ICC(2,1) and ICC(2,k) for all the probes adjusting for DNAm monocyte percentage and other covariates
+icc21.covar.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[1:round(probe.n/2,0)],
+                           covariates = covar, icc.type = "ICC2", sample.individual = samp)} %seed% {seed=TRUE}
+
+icc21.covar.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[(round(probe.n/2,0)+1):probe.n],
+                           covariates = covar, icc.type = "ICC2", sample.individual = samp)} %seed% {seed=TRUE}
+
+
+icc2k.covar.1 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[1:round(probe.n/2,0)],
+                           covariates = covar, icc.type = "ICC2k", sample.individual = samp)} %seed% {seed=TRUE}
+
+icc2k.covar.2 %<-% {ICC.n.m(probe.data = probe.nt, phenotype.data = pheno.nt, subject = "Individual", time = tors, probe = probe.name[(round(probe.n/2,0)+1):probe.n],
+                           covariates = covar, icc.type = "ICC2k", sample.individual = samp)} %seed% {seed=TRUE}
+
+
+## Combine all the results together
+icc21 %<-% rbind(icc21.1, icc21.2)
+icc2k %<-% rbind(icc2k.1, icc2k.2)
+icc21.covar %<-% rbind(icc21.covar.1, icc21.covar.2)
+icc2k.covar %<-% rbind(icc2k.covar.1, icc2k.covar.2)
+
+icc.comb <- rbind(icc21,
+                  icc2k,
+                  icc21.covar,
+                  icc2k.covar)
+
+rm(icc21.1)
+rm(icc21.2)
+rm(icc2k.1)
+rm(icc2k.2)
+rm(icc21.covar.1)
+rm(icc21.covar.2)
+rm(icc2k.covar.1)
+rm(icc2k.covar.2)
+
+## Check progress
+print(paste("ICC calculation and data combination done!", Sys.time()))
+print(Sys.time()-start.time)
+
+icc.comb$type_cov <- paste(icc.comb$type, icc.comb$covariates, sep = "_")
+
+icc.comb$type <- factor(icc.comb$type, levels = c("ICC2", "ICC2k"),
+                        labels = c("ICC(2,1)", "ICC(2,k)"))
+
+icc.comb$covariates <- factor(icc.comb$covariates,
+                              levels = c("No covariates", paste0(covar, collapse = "_")),
+                              labels = c("No covariates", paste0("Adjusted for ", paste0(covar, collapse = ", "))))
+icc.comb$session <- rep(paste0("s", paste0(sess, collapse = "s")), length(probe.name)*4)
+icc.comb$time <- rep(paste0("t", paste0(comp.list[[1]], collapse = "t")), length(probe.name)*4)
+
+print(paste("Variable adding to the combined dataset done!", Sys.time()))
+print(Sys.time()-start.time)
+
+## Save ICC data
+assign(paste0("icc.comb.scen", scen, ifelse(samp == T, "sampled", "")), icc.comb)
+save(list = paste0("icc.comb.scen", scen, ifelse(samp == T, "sampled", "")), 
+     file = paste("Results/", "scen", scen, ifelse(samp == T, "sampled", ""), 
+                  "_icc", "_s", paste0(sess, collapse = "s"), 
+                  "_t", paste0(comp.list[[1]], collapse = "t"), 
+                  "_ela", paste0(ela, collapse = ""), 
+                  ifelse(revision == T, "_revision", ""), ".RData", sep = ""))
+print(paste("Data saving done!", Sys.time()))
+print(Sys.time()-start.time)
+
+## Generate and export distribution plots
+future({
   p <- ggplot(data = icc.comb, aes(x = ICC)) +
-    geom_histogram(fill = ggplot2::alpha("gray", alpha = 0.3), color = "black", bins = 30) +
+    geom_histogram(fill = ggplot2::alpha("gray", 0.3), color = "black", bins = 30) +
     facet_wrap(facets = covariates~type, nrow = 2, ncol = 2) +
     theme_classic()
-  ggsave(file = paste("Results/", "scen", scen, "_icc_dist_", "s1s2", "_t", comp.list[[j]][1], ".pdf", sep = ""),
+  ggsave(file = paste("Results/", "scen", scen, ifelse(samp == T, "sampled", ""), 
+                      "_icc_dist", "_s", paste0(sess, collapse = "s"), 
+                      "_t", paste0(comp.list[[1]], collapse = "t"), 
+                      "_ela", paste0(ela, collapse = ""), 
+                      ifelse(revision == T, "_revision", ""), ".pdf", sep = ""),
          plot = p, height = 6, width = 10)
-  })
   
   print(paste("Distribution plot done!", Sys.time()))
   print(Sys.time()-start.time)
   
-  ## Generate BA plots
-  pdf(file = paste("Results/", "scen", scen, "_icc_baplot", "_s1s2", "_t", comp.list[[j]][1], ".pdf", sep = ""),
-      height = 4, width = 10)
-  par(mfrow=c(1,2))
-  BA.plot(icc21$ICC,icc21.mono$ICC, note = "ICC(2,1) vs. ICC(2,1) adjusted for monocytes")
-  BA.plot(icc2k$ICC,icc2k.mono$ICC, note = "ICC(2,k) vs. ICC(2,k) adjusted for monocytes")
-  dev.off()
-  
-  print(paste("BA plot done!", Sys.time()))
-  print(Sys.time()-start.time)
-  
-  ## Test if there is a significant proportional bias in the Bland-Altman plots
-  icc21.baplot %<-% {data.frame(icc21.raw = icc21$ICC,
-                             icc21.monocytes = icc21.mono$ICC) %>%
-    mutate(icc21.mean = (icc21.raw + icc21.monocytes)/2,
-           icc21.diff = icc21.raw - icc21.monocytes)}
-  
-  icc2k.baplot %<-% {data.frame(icc2k.raw = icc2k$ICC,
-                             icc2k.monocytes = icc2k.mono$ICC) %>%
-    mutate(icc2k.mean = (icc2k.raw + icc2k.monocytes)/2,
-           icc2k.diff = icc2k.raw - icc2k.monocytes)}
-  
-  ba.biastest.res <- data.frame(ICC.type = c("icc21", "icc2k"),
-                                Session = rep("s1s2", 2),
-                                Time.points = rep(paste("t", comp.list[[j]][1], sep = ""), 2),
-                                rbind(coef(summary(lm(icc21.diff ~ icc21.mean, data = icc21.baplot)))[2,],
-                                      coef(summary(lm(icc2k.diff ~ icc2k.mean, data = icc2k.baplot)))[2,]))
-  
-  colnames(ba.biastest.res) <- c("ICC.type", "Session", "Time.points", "B1.estimate", "Std.error", "t.value", "p.value")
-  
-  print(paste("BA plot proportional bias test done!", Sys.time()))
-  print(Sys.time()-start.time)
-  
-  write_csv(ba.biastest.res, file = paste("Results/", "scen", scen, "_ba_biastest_res_", "s1s2_", 
-                                          "t", comp.list[[j]][1], ".csv",
-                                          sep = ""))
-  
-  print(paste("BA plot proportional bias test results saved!", Sys.time()))
-  print(Sys.time()-start.time)
-  print("All done!!!")
-  
-}
+})
+
+## Generate BA plots
+pdf(file = paste("Results/", "scen", scen, ifelse(samp == T, "sampled", ""),
+                 "_icc_baplot", "_s", paste0(sess, collapse = "s"), 
+                 "_t", paste0(comp.list[[1]], collapse = "t"), 
+                 "_ela", paste0(ela, collapse = ""), 
+                 ifelse(revision == T, "_revision", ""), ".pdf", sep = ""),
+    height = 6.5, width = 13.5)
+par(mfrow=c(1,2))
+BA.plot(icc21$ICC,icc21.covar$ICC, note = "ICC(2,1) vs. ICC(2,1) adjusted for covariates")
+BA.plot(icc2k$ICC,icc2k.covar$ICC, note = "ICC(2,k) vs. ICC(2,k) adjusted for covariates")
+dev.off()
+
+print(paste("BA plot done!", Sys.time()))
+print(Sys.time()-start.time)
+
+## Test if there is a significant proportional bias in the Bland-Altman plots
+icc21.baplot %<-% {data.frame(icc21.raw = icc21$ICC,
+                              icc21.covariates = icc21.covar$ICC) %>%
+    mutate(icc21.mean = (icc21.raw + icc21.covariates)/2,
+           icc21.diff = icc21.raw - icc21.covariates)}
+
+icc2k.baplot %<-% {data.frame(icc2k.raw = icc2k$ICC,
+                              icc2k.covariates = icc2k.covar$ICC) %>%
+    mutate(icc2k.mean = (icc2k.raw + icc2k.covariates)/2,
+           icc2k.diff = icc2k.raw - icc2k.covariates)}
+
+ba.biastest.res <- data.frame(ICC.type = c("icc21", "icc2k"),
+                              Session = rep(paste0("s", paste0(sess, collapse = "s")), 2),
+                              Time.points = rep(paste0("t", paste0(comp.list[[1]], collapse = "t")), 2),
+                              rbind(coef(summary(lm(icc21.diff ~ icc21.mean, data = icc21.baplot)))[2,],
+                                    coef(summary(lm(icc2k.diff ~ icc2k.mean, data = icc2k.baplot)))[2,]))
+
+colnames(ba.biastest.res) <- c("ICC.type", "Session", "Time.points", "B1.estimate", "Std.error", "t.value", "p.value")
+
+print(paste("BA plot proportional bias test done!", Sys.time()))
+print(Sys.time()-start.time)
+
+write_csv(ba.biastest.res, file = paste("Results/", "scen", scen, ifelse(samp == T, "sampled", ""),
+                                        "_ba_biastest_res", "_s", paste0(sess, collapse = "s"), 
+                                        "_t", paste0(comp.list[[1]], collapse = "t"), 
+                                        "_ela", paste0(ela, collapse = ""), 
+                                        ifelse(revision == T, "_revision", ""), ".csv",
+                                        sep = ""))
+
+print(paste("BA plot proportional bias test results saved!", Sys.time()))
+print(Sys.time()-start.time)
+print("All done!!!")
 
