@@ -15,10 +15,6 @@ library(FlowSorted.BloodExtended.EPIC)
 
 
 
-
-
-
-
 #############################################################################
 ######################## Epigenetic Algorithm Probes ########################
 #############################################################################
@@ -26,57 +22,58 @@ library(FlowSorted.BloodExtended.EPIC)
 set.seed(100)
 
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen1.icc.comb)[2] <- "ICC_Scen1"
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen2.icc.comb <- dplyr::filter(scen2.icc.comb, scen2.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen2.icc.comb)[2] <- "ICC_Scen2"
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen3.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen3.icc.comb)[2] <- "ICC_Scen3"
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen4.icc.comb)[2] <- "ICC_Scen4"
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen5.icc.comb)[2] <- "ICC_Scen5"
-load("scen6sampled_icc_s1_t1t2.RData")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen6sampled.icc.comb)[2] <- "ICC_Scen6"
-load("scen7sampled_icc_s1_t1t3.RData")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen7sampled.icc.comb)[2] <- "ICC_Scen7"
-load("scen8sampled_icc_s1_t1t4.RData")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen8sampled.icc.comb)[2] <- "ICC_Scen8"
-load("scen9sampled_icc_s1_t3t4.RData")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen9sampled.icc.comb)[2] <- "ICC_Scen9"
-load("scen10_icc_s1s2_t1.RData")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen10.icc.comb)[2] <- "ICC_Scen10"
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen1)[2] <- "ICC_Scen1"
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen2)[2] <- "ICC_Scen2"
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen3)[2] <- "ICC_Scen3"
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen4)[2] <- "ICC_Scen4"
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen5)[2] <- "ICC_Scen5"
+
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen6sampled)[2] <- "ICC_Scen6samp"
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen7sampled)[2] <- "ICC_Scen7samp"
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen8sampled)[2] <- "ICC_Scen8samp"
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen9sampled)[2] <- "ICC_Scen9samp"
+load("scen10_icc_s0s1_t1_ela01_revision.RData")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen10)[2] <- "ICC_Scen10"
 
 ### Merge all Data ### ----
-data <- merge(scen1.icc.comb, scen2.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen3.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen4.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen5.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen6sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen7sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen8sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen9sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen10.icc.comb, by = "DNAm.probe")
+data <- merge(icc.comb.scen1, icc.comb.scen2, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen3, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen4, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen5, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen6sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen7sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen10, by = "DNAm.probe")
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
 data <- data[keep,]
@@ -84,17 +81,16 @@ data <- data[keep,]
 data[,2:11][data[,2:11] < 0.01] <- NA
 
 # Delete old dataframes #
-scen1.icc.comb <- NULL
-scen2.icc.comb <- NULL
-scen3.icc.comb <- NULL
-scen4.icc.comb <- NULL
-scen5.icc.comb <- NULL
-scen6sampled.icc.comb <- NULL
-scen7sampled.icc.comb <- NULL
-scen8sampled.icc.comb <- NULL
-scen9sampled.icc.comb <- NULL
-scen10.icc.comb <- NULL
-scen11.icc.comb <- NULL
+icc.comb.scen1 <- NULL
+icc.comb.scen2 <- NULL
+icc.comb.scen3 <- NULL
+icc.comb.scen4 <- NULL
+icc.comb.scen5 <- NULL
+icc.comb.scen6sampled <- NULL
+icc.comb.scen7sampled <- NULL
+icc.comb.scen8sampled <- NULL
+icc.comb.scen9sampled <- NULL
+icc.comb.scen10 <- NULL
 
 ######################
 ### Horvath Probes ###
@@ -1271,62 +1267,72 @@ data_All[,2:11][data_All[,2:11] < 0.01] <- NA
 
 Box1 <- ggplot(data_All, aes(x=Name, y=ICC_Scen1, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.44,linetype=2) +
+  geom_hline(yintercept=0.47,linetype=2) +
   labs(title="NoStressT1-2", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box2 <- ggplot(data_All, aes(x=Name, y=ICC_Scen2, fill=Name)) + 
   geom_boxplot() + 
   geom_hline(yintercept=0.45,linetype=2) +
   labs(title="NoStressT1-3", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box3 <- ggplot(data_All, aes(x=Name, y=ICC_Scen3, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.30,linetype=2) +
+  geom_hline(yintercept=0.31,linetype=2) +
   labs(title="NoStressT1-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box4 <- ggplot(data_All, aes(x=Name, y=ICC_Scen4, fill=Name)) + 
   geom_boxplot() + 
   geom_hline(yintercept=0.50,linetype=2) +
   labs(title="NoStressT3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box5 <- ggplot(data_All, aes(x=Name, y=ICC_Scen5, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.42,linetype=2) +
+  geom_hline(yintercept=0.44,linetype=2) +
   labs(title="NoStressT1-2-3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box6 <- ggplot(data_All, aes(x=Name, y=ICC_Scen6, fill=Name)) + 
+Box6 <- ggplot(data_All, aes(x=Name, y=ICC_Scen6samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.50,linetype=2) +
+  geom_hline(yintercept=0.64,linetype=2) +
   labs(title="StressT1-2", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box7 <- ggplot(data_All, aes(x=Name, y=ICC_Scen7, fill=Name)) + 
+Box7 <- ggplot(data_All, aes(x=Name, y=ICC_Scen7samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.50,linetype=2) +
+  geom_hline(yintercept=0.64,linetype=2) +
   labs(title="StressT1-3", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box8 <- ggplot(data_All, aes(x=Name, y=ICC_Scen8, fill=Name)) + 
+Box8 <- ggplot(data_All, aes(x=Name, y=ICC_Scen8samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.52,linetype=2) +
+  geom_hline(yintercept=0.65,linetype=2) +
   labs(title="StressT1-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box9 <- ggplot(data_All, aes(x=Name, y=ICC_Scen9, fill=Name)) + 
+Box9 <- ggplot(data_All, aes(x=Name, y=ICC_Scen9samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.48,linetype=2) +
+  geom_hline(yintercept=0.62,linetype=2) +
   labs(title="StressT3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box10 <- ggplot(data_All, aes(x=Name, y=ICC_Scen10, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.29,linetype=2) +
+  geom_hline(yintercept=0.28,linetype=2) +
   labs(title="CrossSessionT1", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 
@@ -1337,9 +1343,6 @@ ggarrange(Box1, Box2, Box3, Box4, Box5,
 
 
 
-
-
-
 ##################################################################################################
 ################################## Biologically Relevant Probes ##################################
 ##################################################################################################
@@ -1347,75 +1350,77 @@ ggarrange(Box1, Box2, Box3, Box4, Box5,
 set.seed(100)
 
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen1.icc.comb)[2] <- "ICC_Scen1"
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen2.icc.comb <- dplyr::filter(scen2.icc.comb, scen2.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen2.icc.comb)[2] <- "ICC_Scen2"
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen3.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen3.icc.comb)[2] <- "ICC_Scen3"
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen4.icc.comb)[2] <- "ICC_Scen4"
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen5.icc.comb)[2] <- "ICC_Scen5"
-load("scen6sampled_icc_s1_t1t2.RData")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen6sampled.icc.comb)[2] <- "ICC_Scen6"
-load("scen7sampled_icc_s1_t1t3.RData")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen7sampled.icc.comb)[2] <- "ICC_Scen7"
-load("scen8sampled_icc_s1_t1t4.RData")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen8sampled.icc.comb)[2] <- "ICC_Scen8"
-load("scen9sampled_icc_s1_t3t4.RData")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen9sampled.icc.comb)[2] <- "ICC_Scen9"
-load("scen10_icc_s1s2_t1.RData")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen10.icc.comb)[2] <- "ICC_Scen10"
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen1)[2] <- "ICC_Scen1"
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen2)[2] <- "ICC_Scen2"
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen3)[2] <- "ICC_Scen3"
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen4)[2] <- "ICC_Scen4"
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen5)[2] <- "ICC_Scen5"
+
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen6sampled)[2] <- "ICC_Scen6samp"
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen7sampled)[2] <- "ICC_Scen7samp"
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen8sampled)[2] <- "ICC_Scen8samp"
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen9sampled)[2] <- "ICC_Scen9samp"
+load("scen10_icc_s0s1_t1_ela01_revision.RData")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen10)[2] <- "ICC_Scen10"
 
 ### Merge all Data ### ----
-data <- merge(scen1.icc.comb, scen2.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen3.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen4.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen5.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen6sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen7sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen8sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen9sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen10.icc.comb, by = "DNAm.probe")
+data <- merge(icc.comb.scen1, icc.comb.scen2, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen3, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen4, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen5, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen6sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen7sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen10, by = "DNAm.probe")
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
 data <- data[keep,]
 # Exclude probes with ICC < 0.01 #
 data[,2:11][data[,2:11] < 0.01] <- NA
+# Define annEPIC #
+annEPIC <- getAnnotation(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
 
 # Delete old dataframes #
-scen1.icc.comb <- NULL
-scen2.icc.comb <- NULL
-scen3.icc.comb <- NULL
-scen4.icc.comb <- NULL
-scen5.icc.comb <- NULL
-scen6sampled.icc.comb <- NULL
-scen7sampled.icc.comb <- NULL
-scen8sampled.icc.comb <- NULL
-scen9sampled.icc.comb <- NULL
-scen10.icc.comb <- NULL
-scen11.icc.comb <- NULL
+icc.comb.scen1 <- NULL
+icc.comb.scen2 <- NULL
+icc.comb.scen3 <- NULL
+icc.comb.scen4 <- NULL
+icc.comb.scen5 <- NULL
+icc.comb.scen6sampled <- NULL
+icc.comb.scen7sampled <- NULL
+icc.comb.scen8sampled <- NULL
+icc.comb.scen9sampled <- NULL
+icc.comb.scen10 <- NULL
 
 
 #####################
@@ -2595,62 +2600,72 @@ data_All[,2:11][data_All[,2:11] < 0.01] <- NA
 
 Box1 <- ggplot(data_All, aes(x=Name, y=ICC_Scen1, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.44,linetype=2) +
+  geom_hline(yintercept=0.47,linetype=2) +
   labs(title="NoStressT1-2", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box2 <- ggplot(data_All, aes(x=Name, y=ICC_Scen2, fill=Name)) + 
   geom_boxplot() + 
   geom_hline(yintercept=0.45,linetype=2) +
   labs(title="NoStressT1-3", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box3 <- ggplot(data_All, aes(x=Name, y=ICC_Scen3, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.30,linetype=2) +
+  geom_hline(yintercept=0.31,linetype=2) +
   labs(title="NoStressT1-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box4 <- ggplot(data_All, aes(x=Name, y=ICC_Scen4, fill=Name)) + 
   geom_boxplot() + 
   geom_hline(yintercept=0.50,linetype=2) +
   labs(title="NoStressT3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box5 <- ggplot(data_All, aes(x=Name, y=ICC_Scen5, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.42,linetype=2) +
+  geom_hline(yintercept=0.44,linetype=2) +
   labs(title="NoStressT1-2-3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box6 <- ggplot(data_All, aes(x=Name, y=ICC_Scen6, fill=Name)) + 
+Box6 <- ggplot(data_All, aes(x=Name, y=ICC_Scen6samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.50,linetype=2) +
+  geom_hline(yintercept=0.64,linetype=2) +
   labs(title="StressT1-2", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box7 <- ggplot(data_All, aes(x=Name, y=ICC_Scen7, fill=Name)) + 
+Box7 <- ggplot(data_All, aes(x=Name, y=ICC_Scen7samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.50,linetype=2) +
+  geom_hline(yintercept=0.64,linetype=2) +
   labs(title="StressT1-3", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box8 <- ggplot(data_All, aes(x=Name, y=ICC_Scen8, fill=Name)) + 
+Box8 <- ggplot(data_All, aes(x=Name, y=ICC_Scen8samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.52,linetype=2) +
+  geom_hline(yintercept=0.65,linetype=2) +
   labs(title="StressT1-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-Box9 <- ggplot(data_All, aes(x=Name, y=ICC_Scen9, fill=Name)) + 
+Box9 <- ggplot(data_All, aes(x=Name, y=ICC_Scen9samp, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.48,linetype=2) +
+  geom_hline(yintercept=0.62,linetype=2) +
   labs(title="StressT3-4", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 Box10 <- ggplot(data_All, aes(x=Name, y=ICC_Scen10, fill=Name)) + 
   geom_boxplot() + 
-  geom_hline(yintercept=0.29,linetype=2) +
+  geom_hline(yintercept=0.28,linetype=2) +
   labs(title="CrossSessionT1", x =NULL, y = NULL) + 
+  scale_fill_brewer(palette="Set2") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 
