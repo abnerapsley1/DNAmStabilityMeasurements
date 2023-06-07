@@ -21,77 +21,74 @@ library(ENmix)
 ##################################################################################################
 ################################## Highly Stable Probe Analysis ##################################
 ##################################################################################################
-### Set Seed ### ----
-set.seed(100)
-
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen1.icc.comb)[2] <- "ICC_Scen1"
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen2.icc.comb <- dplyr::filter(scen2.icc.comb, scen2.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen2.icc.comb)[2] <- "ICC_Scen2"
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen3.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen3.icc.comb)[2] <- "ICC_Scen3"
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen4.icc.comb)[2] <- "ICC_Scen4"
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen5.icc.comb)[2] <- "ICC_Scen5"
-load("scen6sampled_icc_s1_t1t2.RData")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen6sampled.icc.comb)[2] <- "ICC_Scen6"
-load("scen7sampled_icc_s1_t1t3.RData")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen7sampled.icc.comb)[2] <- "ICC_Scen7"
-load("scen8sampled_icc_s1_t1t4.RData")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen8sampled.icc.comb)[2] <- "ICC_Scen8"
-load("scen9sampled_icc_s1_t3t4.RData")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen9sampled.icc.comb)[2] <- "ICC_Scen9"
-load("scen10_icc_s1s2_t1.RData")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen10.icc.comb)[2] <- "ICC_Scen10"
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen1)[2] <- "ICC_Scen1"
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen2)[2] <- "ICC_Scen2"
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen3)[2] <- "ICC_Scen3"
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen4)[2] <- "ICC_Scen4"
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen5)[2] <- "ICC_Scen5"
+
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen6sampled)[2] <- "ICC_Scen6samp"
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen7sampled)[2] <- "ICC_Scen7samp"
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen8sampled)[2] <- "ICC_Scen8samp"
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen9sampled)[2] <- "ICC_Scen9samp"
+load("scen10_icc_s0s1_t1_ela01_revision.RData")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen10)[2] <- "ICC_Scen10"
 
 ### Merge all Data ### ----
-data <- merge(scen1.icc.comb, scen2.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen3.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen4.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen5.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen6sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen7sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen8sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen9sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen10.icc.comb, by = "DNAm.probe")
+data <- merge(icc.comb.scen1, icc.comb.scen2, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen3, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen4, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen5, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen6sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen7sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen10, by = "DNAm.probe")
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
 data <- data[keep,]
 
 # Delete old dataframes #
-scen1.icc.comb <- NULL
-scen2.icc.comb <- NULL
-scen3.icc.comb <- NULL
-scen4.icc.comb <- NULL
-scen5.icc.comb <- NULL
-scen6sampled.icc.comb <- NULL
-scen7sampled.icc.comb <- NULL
-scen8sampled.icc.comb <- NULL
-scen9sampled.icc.comb <- NULL
-scen10.icc.comb <- NULL
-scen11.icc.comb <- NULL
+icc.comb.scen1 <- NULL
+icc.comb.scen2 <- NULL
+icc.comb.scen3 <- NULL
+icc.comb.scen4 <- NULL
+icc.comb.scen5 <- NULL
+icc.comb.scen6sampled <- NULL
+icc.comb.scen7sampled <- NULL
+icc.comb.scen8sampled <- NULL
+icc.comb.scen9sampled <- NULL
+icc.comb.scen10 <- NULL
 
 ### Filter to Only Keep Probes Highly Reliable (ICC > 0.9), in Scenarios 1-5 and 10 ### ----
 HighProbes <- dplyr::filter(data, data$ICC_Scen1 >= 0.9 &
@@ -133,7 +130,7 @@ Phenotypes <- dplyr::filter(Phenotypes, Phenotypes$Session == 1)
 
 ### Multilevel Modeling ### ----
 # Define empty dataframe to store results #
-MLM_Results <- data.frame(DNAm.probe = colnames(Phenotypes)[30:2218],
+MLM_Results <- data.frame(DNAm.probe = colnames(Phenotypes)[30:8195],
                           Intercept = NA,
                           Time2_Beta = NA,
                           Time3_Beta = NA,
@@ -164,7 +161,7 @@ for (j in 30:ncol(Phenotypes)){
   MLM <- lmerTest::lmer(Phenotypes[,j] ~ 1 + as.factor(Time) + DNAm_Monocytes + as.factor(Methylation_Batch) + (1|Individual), Phenotypes)
   MLM_Results[i,2:5] <- summary(MLM)$coefficients[1:4,1]
   MLM_Results[i,6:9] <- summary(MLM)$coefficients[1:4,5]
-  MLM_Results[i,10:13] <- MLM_Results[i,6:9] * nrow(Stress_S6_HighProbes)
+  MLM_Results[i,10:13] <- MLM_Results[i,6:9] * nrow(HighProbes)
 }
 # Add FDR adjusted p-values #
 MLM_Results$Pval_Int_FDRadj <- p.adjust(MLM_Results$Pval_Int, method = "fdr")
@@ -195,7 +192,7 @@ mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
         pos=MLM_Results_Sorted$Pos,
         p=MLM_Results_Sorted$Pval_T2,
         sigthre=0.05,
-        sigthre2=(0.05/1413),
+        sigthre2=(0.05/1293),
         outf="T2vT1_ManhattanPlot",
         #markprobe = c("cg19913448"),
         outfmt="jpg")
@@ -206,7 +203,7 @@ mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
         pos=MLM_Results_Sorted$Pos,
         p=MLM_Results_Sorted$Pval_T3,
         sigthre=0.05,
-        sigthre2=(0.05/1413),
+        sigthre2=(0.05/1293),
         outf="T3vT1_ManhattanPlot",
         #markprobe = c("cg19913448"),
         outfmt="jpg")
@@ -217,7 +214,7 @@ mhtplot(probe=MLM_Results_Sorted$DNAm.probe,
         pos=MLM_Results_Sorted$Pos,
         p=MLM_Results_Sorted$Pval_T4,
         sigthre=0.05,
-        sigthre2=(0.05/1413),
+        sigthre2=(0.05/1293),
         outf="T4vT1_ManhattanPlot",
         #markprobe = c("cg19913448"),
         outfmt="jpg")
