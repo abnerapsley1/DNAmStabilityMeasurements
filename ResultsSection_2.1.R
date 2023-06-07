@@ -17,13 +17,13 @@ library(LSD)
 ##################
 
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen1.icc.comb_21 <- scen1.icc.comb[1:865859,]
-scen1.icc.comb_2k <- scen1.icc.comb[865860:1731718,]
-colnames(scen1.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen1.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen1.icc.comb_21, scen1.icc.comb_2k, by = "DNAm.probe")
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen1_21 <- icc.comb.scen1[1:865859,]
+icc.comb.scen1_2k <- icc.comb.scen1[865860:1731718,]
+colnames(icc.comb.scen1_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen1_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen1_21, icc.comb.scen1_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -60,13 +60,13 @@ heatscatter(data$`ICC(2,1)`,data$`ICC(2,k)`,
 ##################
 
 ### Read in Data ### ----
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen2.icc.comb_21 <- scen2.icc.comb[1:865859,]
-scen2.icc.comb_2k <- scen2.icc.comb[865860:1731718,]
-colnames(scen2.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen2.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen2.icc.comb_21, scen2.icc.comb_2k, by = "DNAm.probe")
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen2_21 <- icc.comb.scen2[1:865859,]
+icc.comb.scen2_2k <- icc.comb.scen2[865860:1731718,]
+colnames(icc.comb.scen2_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen2_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen2_21, icc.comb.scen2_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -103,13 +103,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen3.icc.comb_21 <- scen3.icc.comb[1:865859,]
-scen3.icc.comb_2k <- scen3.icc.comb[865860:1731718,]
-colnames(scen3.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen3.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen3.icc.comb_21, scen3.icc.comb_2k, by = "DNAm.probe")
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen3_21 <- icc.comb.scen3[1:865859,]
+icc.comb.scen3_2k <- icc.comb.scen3[865860:1731718,]
+colnames(icc.comb.scen3_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen3_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen3_21, icc.comb.scen3_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -146,13 +146,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen4.icc.comb_21 <- scen4.icc.comb[1:865859,]
-scen4.icc.comb_2k <- scen4.icc.comb[865860:1731718,]
-colnames(scen4.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen4.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen4.icc.comb_21, scen4.icc.comb_2k, by = "DNAm.probe")
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen4_21 <- icc.comb.scen4[1:865859,]
+icc.comb.scen4_2k <- icc.comb.scen4[865860:1731718,]
+colnames(icc.comb.scen4_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen4_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen4_21, icc.comb.scen4_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -189,13 +189,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen5.icc.comb_21 <- scen5.icc.comb[1:865859,]
-scen5.icc.comb_2k <- scen5.icc.comb[865860:1731718,]
-colnames(scen5.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen5.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen5.icc.comb_21, scen5.icc.comb_2k, by = "DNAm.probe")
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen5_21 <- icc.comb.scen5[1:865859,]
+icc.comb.scen5_2k <- icc.comb.scen5[865860:1731718,]
+colnames(icc.comb.scen5_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen5_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen5_21, icc.comb.scen5_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -232,13 +232,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen6_icc_s1_t1t2.RData")
-scen6.icc.comb <- dplyr::filter(scen6.icc.comb, scen6.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen6.icc.comb_21 <- scen6.icc.comb[1:865859,]
-scen6.icc.comb_2k <- scen6.icc.comb[865860:1731718,]
-colnames(scen6.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen6.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen6.icc.comb_21, scen6.icc.comb_2k, by = "DNAm.probe")
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen6sampled_21 <- icc.comb.scen6sampled[1:865859,]
+icc.comb.scen6sampled_2k <- icc.comb.scen6sampled[865860:1731718,]
+colnames(icc.comb.scen6sampled_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen6sampled_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen6sampled_21, icc.comb.scen6sampled_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -275,13 +275,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen7_icc_s1_t1t3.RData")
-scen7.icc.comb <- dplyr::filter(scen7.icc.comb, scen7.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen7.icc.comb_21 <- scen7.icc.comb[1:865859,]
-scen7.icc.comb_2k <- scen7.icc.comb[865860:1731718,]
-colnames(scen7.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen7.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen7.icc.comb_21, scen7.icc.comb_2k, by = "DNAm.probe")
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen7sampled_21 <- icc.comb.scen7sampled[1:865859,]
+icc.comb.scen7sampled_2k <- icc.comb.scen7sampled[865860:1731718,]
+colnames(icc.comb.scen7sampled_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen7sampled_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen7sampled_21, icc.comb.scen7sampled_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -318,13 +318,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen8_icc_s1_t1t4.RData")
-scen8.icc.comb <- dplyr::filter(scen8.icc.comb, scen8.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen8.icc.comb_21 <- scen8.icc.comb[1:865859,]
-scen8.icc.comb_2k <- scen8.icc.comb[865860:1731718,]
-colnames(scen8.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen8.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen8.icc.comb_21, scen8.icc.comb_2k, by = "DNAm.probe")
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen8sampled_21 <- icc.comb.scen8sampled[1:865859,]
+icc.comb.scen8sampled_2k <- icc.comb.scen8sampled[865860:1731718,]
+colnames(icc.comb.scen8sampled_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen8sampled_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen8sampled_21, icc.comb.scen8sampled_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -361,13 +361,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen9_icc_s1_t3t4.RData")
-scen9.icc.comb <- dplyr::filter(scen9.icc.comb, scen9.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen9.icc.comb_21 <- scen9.icc.comb[1:865859,]
-scen9.icc.comb_2k <- scen9.icc.comb[865860:1731718,]
-colnames(scen9.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen9.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen9.icc.comb_21, scen9.icc.comb_2k, by = "DNAm.probe")
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen9sampled_21 <- icc.comb.scen9sampled[1:865859,]
+icc.comb.scen9sampled_2k <- icc.comb.scen9sampled[865860:1731718,]
+colnames(icc.comb.scen9sampled_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen9sampled_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen9sampled_21, icc.comb.scen9sampled_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -404,13 +404,13 @@ heatscatter(data$mean,data$diff,
 ###################
 
 ### Read in Data ### ----
-load("scen10_icc_s1s2_t1.RData")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$covariates == "No covariates")[,c(1,4:5)]
-scen10.icc.comb_21 <- scen10.icc.comb[1:865859,]
-scen10.icc.comb_2k <- scen10.icc.comb[865860:1731718,]
-colnames(scen10.icc.comb_21)[3] <- "ICC(2,1)"
-colnames(scen10.icc.comb_2k)[3] <- "ICC(2,k)"
-data <- merge(scen10.icc.comb_21, scen10.icc.comb_2k, by = "DNAm.probe")
+load("scen10_icc_s0s1_t1_ela01_revision.RData")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$covariates == "No covariates")[,c(1,4:5)]
+icc.comb.scen10_21 <- icc.comb.scen10[1:865859,]
+icc.comb.scen10_2k <- icc.comb.scen10[865860:1731718,]
+colnames(icc.comb.scen10_21)[3] <- "ICC(2,1)"
+colnames(icc.comb.scen10_2k)[3] <- "ICC(2,k)"
+data <- merge(icc.comb.scen10_21, icc.comb.scen10_2k, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -451,13 +451,13 @@ heatscatter(data$mean,data$diff,
 ##################
 
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen1.icc.comb_NoAdj <- scen1.icc.comb[1:865859,]
-scen1.icc.comb_Adj <- scen1.icc.comb[865860:1731718,]
-colnames(scen1.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen1.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen1.icc.comb_NoAdj, scen1.icc.comb_Adj, by = "DNAm.probe")
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen1_NoAdj <- icc.comb.scen1[1:865859,]
+icc.comb.scen1_Adj <- icc.comb.scen1[865860:1731718,]
+colnames(icc.comb.scen1_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen1_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen1_NoAdj, icc.comb.scen1_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -494,13 +494,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen2.icc.comb_NoAdj <- scen2.icc.comb[1:865859,]
-scen2.icc.comb_Adj <- scen2.icc.comb[865860:1731718,]
-colnames(scen2.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen2.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen2.icc.comb_NoAdj, scen2.icc.comb_Adj, by = "DNAm.probe")
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen2_NoAdj <- icc.comb.scen2[1:865859,]
+icc.comb.scen2_Adj <- icc.comb.scen2[865860:1731718,]
+colnames(icc.comb.scen2_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen2_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen2_NoAdj, icc.comb.scen2_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -537,13 +537,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen3.icc.comb_NoAdj <- scen3.icc.comb[1:865859,]
-scen3.icc.comb_Adj <- scen3.icc.comb[865860:1731718,]
-colnames(scen3.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen3.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen3.icc.comb_NoAdj, scen3.icc.comb_Adj, by = "DNAm.probe")
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen3_NoAdj <- icc.comb.scen3[1:865859,]
+icc.comb.scen3_Adj <- icc.comb.scen3[865860:1731718,]
+colnames(icc.comb.scen3_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen3_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen3_NoAdj, icc.comb.scen3_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -580,13 +580,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen4.icc.comb_NoAdj <- scen4.icc.comb[1:865859,]
-scen4.icc.comb_Adj <- scen4.icc.comb[865860:1731718,]
-colnames(scen4.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen4.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen4.icc.comb_NoAdj, scen4.icc.comb_Adj, by = "DNAm.probe")
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen4_NoAdj <- icc.comb.scen4[1:865859,]
+icc.comb.scen4_Adj <- icc.comb.scen4[865860:1731718,]
+colnames(icc.comb.scen4_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen4_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen4_NoAdj, icc.comb.scen4_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -623,13 +623,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen5.icc.comb_NoAdj <- scen5.icc.comb[1:865859,]
-scen5.icc.comb_Adj <- scen5.icc.comb[865860:1731718,]
-colnames(scen5.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen5.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen5.icc.comb_NoAdj, scen5.icc.comb_Adj, by = "DNAm.probe")
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen5_NoAdj <- icc.comb.scen5[1:865859,]
+icc.comb.scen5_Adj <- icc.comb.scen5[865860:1731718,]
+colnames(icc.comb.scen5_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen5_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen5_NoAdj, icc.comb.scen5_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -666,13 +666,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen6sampled_icc_s1_t1t2.RData")
-scen6.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen6.icc.comb_NoAdj <- scen6.icc.comb[1:865859,]
-scen6.icc.comb_Adj <- scen6.icc.comb[865860:1731718,]
-colnames(scen6.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen6.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen6.icc.comb_NoAdj, scen6.icc.comb_Adj, by = "DNAm.probe")
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen6sampled_NoAdj <- icc.comb.scen6sampled[1:865859,]
+icc.comb.scen6sampled_Adj <- icc.comb.scen6sampled[865860:1731718,]
+colnames(icc.comb.scen6sampled_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen6sampled_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen6sampled_NoAdj, icc.comb.scen6sampled_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -705,17 +705,17 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
             alpha = 50)
 
 ##################
-### Scenario 6 ###
+### Scenario 7 ###
 ##################
 
 ### Read in Data ### ----
-load("scen7sampled_icc_s1_t1t3.RData")
-scen7.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen7.icc.comb_NoAdj <- scen7.icc.comb[1:865859,]
-scen7.icc.comb_Adj <- scen7.icc.comb[865860:1731718,]
-colnames(scen7.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen7.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen7.icc.comb_NoAdj, scen7.icc.comb_Adj, by = "DNAm.probe")
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen7sampled_NoAdj <- icc.comb.scen7sampled[1:865859,]
+icc.comb.scen7sampled_Adj <- icc.comb.scen7sampled[865860:1731718,]
+colnames(icc.comb.scen7sampled_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen7sampled_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen7sampled_NoAdj, icc.comb.scen7sampled_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -752,13 +752,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen8sampled_icc_s1_t1t4.RData")
-scen8.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen8.icc.comb_NoAdj <- scen8.icc.comb[1:865859,]
-scen8.icc.comb_Adj <- scen8.icc.comb[865860:1731718,]
-colnames(scen8.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen8.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen8.icc.comb_NoAdj, scen8.icc.comb_Adj, by = "DNAm.probe")
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen8sampled_NoAdj <- icc.comb.scen8sampled[1:865859,]
+icc.comb.scen8sampled_Adj <- icc.comb.scen8sampled[865860:1731718,]
+colnames(icc.comb.scen8sampled_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen8sampled_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen8sampled_NoAdj, icc.comb.scen8sampled_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -795,13 +795,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ##################
 
 ### Read in Data ### ----
-load("scen9sampled_icc_s1_t3t4.RData")
-scen9.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen9.icc.comb_NoAdj <- scen9.icc.comb[1:865859,]
-scen9.icc.comb_Adj <- scen9.icc.comb[865860:1731718,]
-colnames(scen9.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen9.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen9.icc.comb_NoAdj, scen9.icc.comb_Adj, by = "DNAm.probe")
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen9sampled_NoAdj <- icc.comb.scen9sampled[1:865859,]
+icc.comb.scen9sampled_Adj <- icc.comb.scen9sampled[865860:1731718,]
+colnames(icc.comb.scen9sampled_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen9sampled_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen9sampled_NoAdj, icc.comb.scen9sampled_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -838,13 +838,13 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ###################
 
 ### Read in Data ### ----
-load("scen10_icc_s1s2_t1.RData")
-scen10.icc.comb <- dplyr::filter(scen10.icc.comb, scen10.icc.comb$type == "ICC(2,1)")[,c(1,2,5)]
-scen10.icc.comb_NoAdj <- scen10.icc.comb[1:865859,]
-scen10.icc.comb_Adj <- scen10.icc.comb[865860:1731718,]
-colnames(scen10.icc.comb_NoAdj)[3] <- "ICC_NoAdj"
-colnames(scen10.icc.comb_Adj)[3] <- "ICC_Adj"
-data <- merge(scen10.icc.comb_NoAdj, scen10.icc.comb_Adj, by = "DNAm.probe")
+load("scen10_icc_s0s1_t1_ela01_revision.RData")
+icc.comb.scen10 <- dplyr::filter(icc.comb.scen10, icc.comb.scen10$type == "ICC(2,1)")[,c(1,2,5)]
+icc.comb.scen10_NoAdj <- icc.comb.scen10[1:865859,]
+icc.comb.scen10_Adj <- icc.comb.scen10[865860:1731718,]
+colnames(icc.comb.scen10_NoAdj)[3] <- "ICC_NoAdj"
+colnames(icc.comb.scen10_Adj)[3] <- "ICC_Adj"
+data <- merge(icc.comb.scen10_NoAdj, icc.comb.scen10_Adj, by = "DNAm.probe")
 data <- data[,c(1,3,5)]
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
@@ -881,60 +881,60 @@ heatscatter(data$ICC_NoAdj,data$ICC_Adj,
 ############################################################################
 
 ### Read in Data ### ----
-load("scen6_icc_s1_t1t2.RData")
-scen6.icc.comb <- dplyr::filter(scen6.icc.comb, scen6.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen6.icc.comb <- dplyr::filter(scen6.icc.comb, scen6.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen6.icc.comb)[2] <- "ICC_Scen6"
-load("scen7_icc_s1_t1t3.RData")
-scen7.icc.comb <- dplyr::filter(scen7.icc.comb, scen7.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen7.icc.comb <- dplyr::filter(scen7.icc.comb, scen7.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen7.icc.comb)[2] <- "ICC_Scen7"
-load("scen8_icc_s1_t1t4.RData")
-scen8.icc.comb <- dplyr::filter(scen8.icc.comb, scen8.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen8.icc.comb <- dplyr::filter(scen8.icc.comb, scen8.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen8.icc.comb)[2] <- "ICC_Scen8"
-load("scen9_icc_s1_t3t4.RData")
-scen9.icc.comb <- dplyr::filter(scen9.icc.comb, scen9.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen9.icc.comb <- dplyr::filter(scen9.icc.comb, scen9.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen9.icc.comb)[2] <- "ICC_Scen9"
-load("scen6sampled_icc_s1_t1t2.RData")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen6sampled.icc.comb <- dplyr::filter(scen6sampled.icc.comb, scen6sampled.icc.comb$type == "ICC(2,k)")[,c(1,5)]
-colnames(scen6sampled.icc.comb)[2] <- "ICC_Scen6samp"
-load("scen7sampled_icc_s1_t1t3.RData")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen7sampled.icc.comb <- dplyr::filter(scen7sampled.icc.comb, scen7sampled.icc.comb$type == "ICC(2,k)")[,c(1,5)]
-colnames(scen7sampled.icc.comb)[2] <- "ICC_Scen7samp"
-load("scen8sampled_icc_s1_t1t4.RData")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen8sampled.icc.comb <- dplyr::filter(scen8sampled.icc.comb, scen8sampled.icc.comb$type == "ICC(2,k)")[,c(1,5)]
-colnames(scen8sampled.icc.comb)[2] <- "ICC_Scen8samp"
-load("scen9sampled_icc_s1_t3t4.RData")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen9sampled.icc.comb <- dplyr::filter(scen9sampled.icc.comb, scen9sampled.icc.comb$type == "ICC(2,k)")[,c(1,5)]
-colnames(scen9sampled.icc.comb)[2] <- "ICC_Scen9samp"
+load("scen6_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6 <- dplyr::filter(icc.comb.scen6, icc.comb.scen6$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6 <- dplyr::filter(icc.comb.scen6, icc.comb.scen6$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen6)[2] <- "ICC_Scen6"
+load("scen7_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7 <- dplyr::filter(icc.comb.scen7, icc.comb.scen7$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7 <- dplyr::filter(icc.comb.scen7, icc.comb.scen7$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen7)[2] <- "ICC_Scen7"
+load("scen8_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8 <- dplyr::filter(icc.comb.scen8, icc.comb.scen8$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8 <- dplyr::filter(icc.comb.scen8, icc.comb.scen8$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen8)[2] <- "ICC_Scen8"
+load("scen9_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9 <- dplyr::filter(icc.comb.scen9, icc.comb.scen9$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9 <- dplyr::filter(icc.comb.scen9, icc.comb.scen9$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen9)[2] <- "ICC_Scen9"
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen6sampled)[2] <- "ICC_Scen6samp"
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen7sampled)[2] <- "ICC_Scen7samp"
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen8sampled)[2] <- "ICC_Scen8samp"
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen9sampled)[2] <- "ICC_Scen9samp"
 
 ### Merge all Data ### ----
-data <- merge(scen6.icc.comb, scen7.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen8.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen9.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen6sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen7sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen8sampled.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen9sampled.icc.comb, by = "DNAm.probe")
+data <- merge(icc.comb.scen6, icc.comb.scen7, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen6sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen7sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9sampled, by = "DNAm.probe")
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
 data <- data[keep,]
 
 # Delete old dataframes #
-scen6.icc.comb <- NULL
-scen7.icc.comb <- NULL
-scen8.icc.comb <- NULL
-scen9.icc.comb <- NULL
-scen6sampled.icc.comb <- NULL
-scen7sampled.icc.comb <- NULL
-scen8sampled.icc.comb <- NULL
-scen9sampled.icc.comb <- NULL
+icc.comb.scen6 <- NULL
+icc.comb.scen7 <- NULL
+icc.comb.scen8 <- NULL
+icc.comb.scen9 <- NULL
+icc.comb.scen6sampled <- NULL
+icc.comb.scen7sampled <- NULL
+icc.comb.scen8sampled <- NULL
+icc.comb.scen9sampled <- NULL
 
 ### Perform Statistical Testing ### ----
 ## Scenario 6 ##
@@ -1043,159 +1043,79 @@ heatscatter(data$ICC_Scen9samp,data$ICC_Scen9,
             add.contour = FALSE, 
             alpha = 50)
 
-### Create Histograms for Comparison ### ----
-describe(data)
-
-hist6 <- ggplot(data, aes(x=ICC_Scen6)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.43),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL, title = "Scenario 6") +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist7 <- ggplot(data, aes(x=ICC_Scen7)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.45),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL, title = "Scenario 7") +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist8 <- ggplot(data, aes(x=ICC_Scen8)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.47),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL, title = "Scenario 8") +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist9 <- ggplot(data, aes(x=ICC_Scen9)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.43),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL, title = "Scenario 9") +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist6samp <- ggplot(data, aes(x=ICC_Scen6samp)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.64),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist7samp <- ggplot(data, aes(x=ICC_Scen7samp)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.64),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist8samp <- ggplot(data, aes(x=ICC_Scen8samp)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.65),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-hist9samp <- ggplot(data, aes(x=ICC_Scen9samp)) + 
-  geom_histogram(color="black", fill="white") +
-  geom_vline(aes(xintercept=0.62),
-             color="black", linetype="dashed", size=1) +
-  theme_bw() +
-  ylim(0,80000) +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        plot.title = element_text(hjust = 0.5))  
-
-ggarrange(hist6, hist7, hist8, hist9,
-          hist6samp, hist7samp, hist8samp, hist9samp,
-          ncol = 4, nrow = 2)
 
 ############################################################################
 ##################### Repeated Measures Calculations #######################
 ############################################################################
 
 ### Read in Data ### ----
-load("scen1_icc_s0_t1t2.RData")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen1.icc.comb <- dplyr::filter(scen1.icc.comb, scen1.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen1.icc.comb)[2] <- "ICC_Scen1"
-load("scen2_icc_s0_t1t3.RData")
-scen2.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen2.icc.comb <- dplyr::filter(scen2.icc.comb, scen2.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen2.icc.comb)[2] <- "ICC_Scen2"
-load("scen3_icc_s0_t1t4.RData")
-scen3.icc.comb <- dplyr::filter(scen11.icc.comb, scen11.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen3.icc.comb <- dplyr::filter(scen3.icc.comb, scen3.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen3.icc.comb)[2] <- "ICC_Scen3"
-load("scen4_icc_s0_t3t4.RData")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen4.icc.comb <- dplyr::filter(scen4.icc.comb, scen4.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen4.icc.comb)[2] <- "ICC_Scen4"
-load("scen5_icc_s0_t1t2t3t4.RData")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$covariates == "Adjusted for DNAm_Monocytes")
-scen5.icc.comb <- dplyr::filter(scen5.icc.comb, scen5.icc.comb$type == "ICC(2,1)")[,c(1,5)]
-colnames(scen5.icc.comb)[2] <- "ICC_Scen5"
+load("scen1_icc_s0_t1t2_ela01_revision.RData")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen1 <- dplyr::filter(icc.comb.scen1, icc.comb.scen1$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen1)[2] <- "ICC_Scen1"
+load("scen2_icc_s0_t1t3_ela01_revision.RData")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen2 <- dplyr::filter(icc.comb.scen2, icc.comb.scen2$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen2)[2] <- "ICC_Scen2"
+load("scen3_icc_s0_t1t4_ela01_revision.RData")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen3 <- dplyr::filter(icc.comb.scen3, icc.comb.scen3$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen3)[2] <- "ICC_Scen3"
+load("scen4_icc_s0_t3t4_ela01_revision.RData")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen4 <- dplyr::filter(icc.comb.scen4, icc.comb.scen4$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen4)[2] <- "ICC_Scen4"
+load("scen5_icc_s0_t1t2t3t4_ela01_revision.RData")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen5 <- dplyr::filter(icc.comb.scen5, icc.comb.scen5$type == "ICC(2,1)")[,c(1,5)]
+colnames(icc.comb.scen5)[2] <- "ICC_Scen5"
+
+load("scen6sampled_icc_s1_t1t2_ela01_revision.RData")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen6sampled <- dplyr::filter(icc.comb.scen6sampled, icc.comb.scen6sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen6sampled)[2] <- "ICC_Scen6samp"
+load("scen7sampled_icc_s1_t1t3_ela01_revision.RData")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen7sampled <- dplyr::filter(icc.comb.scen7sampled, icc.comb.scen7sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen7sampled)[2] <- "ICC_Scen7samp"
+load("scen8sampled_icc_s1_t1t4_ela01_revision.RData")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen8sampled <- dplyr::filter(icc.comb.scen8sampled, icc.comb.scen8sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen8sampled)[2] <- "ICC_Scen8samp"
+load("scen9sampled_icc_s1_t3t4_ela01_revision.RData")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen9sampled <- dplyr::filter(icc.comb.scen9sampled, icc.comb.scen9sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen9sampled)[2] <- "ICC_Scen9samp"
+load("scen12sampled_icc_s1_t1t2t3t4_ela01_revision.Rdata")
+icc.comb.scen12sampled <- dplyr::filter(icc.comb.scen12sampled, icc.comb.scen12sampled$covariates == "Adjusted for DNAm_Monocytes, Methylation_Batch")
+icc.comb.scen12sampled <- dplyr::filter(icc.comb.scen12sampled, icc.comb.scen12sampled$type == "ICC(2,k)")[,c(1,5)]
+colnames(icc.comb.scen12sampled)[2] <- "ICC_Scen12samp"
 
 ### Merge all Data ### ----
-data <- merge(scen1.icc.comb, scen2.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen3.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen4.icc.comb, by = "DNAm.probe")
-data <- merge(data, scen5.icc.comb, by = "DNAm.probe")
+data <- merge(icc.comb.scen1, icc.comb.scen2, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen3, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen4, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen5, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen6sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen7sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen8sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen9sampled, by = "DNAm.probe")
+data <- merge(data, icc.comb.scen12sampled, by = "DNAm.probe")
 Exclude_Probes_Comb <- readRDS("Exclude_Probes_Comb.Rds")
 keep <- !(data$DNAm.probe %in% Exclude_Probes_Comb$DNAm.probe)
 data <- data[keep,]
 
 # Delete old dataframes #
-scen1.icc.comb <- NULL
-scen2.icc.comb <- NULL
-scen3.icc.comb <- NULL
-scen4.icc.comb <- NULL
-scen5.icc.comb <- NULL
-scen11.icc.comb <- NULL
+icc.comb.scen1 <- NULL
+icc.comb.scen2 <- NULL
+icc.comb.scen3 <- NULL
+icc.comb.scen4 <- NULL
+icc.comb.scen5 <- NULL
+icc.comb.scen6sampled <- NULL
+icc.comb.scen7sampled <- NULL
+icc.comb.scen8sampled <- NULL
+icc.comb.scen9sampled <- NULL
+icc.comb.scen12sampled <- NULL
 
 ### Perform Statistical Testing ### ----
 ## Scenario 5 and 1 ##
